@@ -16,4 +16,10 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"/>
 
+    <com.skylar.practice.view.draw.PlayerActionView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"/>
+
 </LinearLayout>
