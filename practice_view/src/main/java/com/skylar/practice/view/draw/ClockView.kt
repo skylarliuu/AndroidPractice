@@ -1,4 +1,4 @@
-package com.skylar.practice.view.custom
+package com.skylar.practice.view.draw
 
 import android.content.Context
 import android.graphics.*
