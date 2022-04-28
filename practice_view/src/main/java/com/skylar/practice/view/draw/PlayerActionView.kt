@@ -7,6 +7,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import com.skylar.practice.view.Utils
+import kotlin.math.sqrt
 
 
 // 仿喜马拉雅播放状态按钮切换
@@ -112,7 +113,7 @@ class PlayerActionView : View {
         mLeftStartFour.set(-mRectWidth * 1.5f, halfHeight)
 
         //三角形的重心和圆心重合, 三角形才居中
-        val halfTriangleHeight = Utils.divide(mRectHeight, 3f)
+        val halfTriangleHeight = Utils.divide(mRectHeight * sqrt(3f), 6f)
         mLeftEndOne.set(0f, -halfTriangleHeight * 2)
         mLeftEndTwo.set(0f, -halfTriangleHeight * 2)
         mLeftEndThree.set(0f, halfTriangleHeight)
