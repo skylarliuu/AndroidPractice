@@ -10,7 +10,7 @@ import com.skylar.practice.view.Utils
 import kotlin.math.sqrt
 
 
-// 仿喜马拉雅播放状态按钮切换
+// 实现喜马拉雅播放状态按钮切换
 // Created by skylar on 2022/4/27.
 //
 class PlayerActionView : View {
@@ -65,6 +65,7 @@ class PlayerActionView : View {
     private val mRightPointFEvaluatorThree = PointFEvaluator(mRightCurrentThree)
     private val mRightPointFEvaluatorFour = PointFEvaluator(mRightCurrentFour)
 
+    private val mPathEffect: PathEffect = CornerPathEffect(6f)
     private var mRectWidth = 0f
     private var mRectHeight = 0f
     private var mFraction = 0f
@@ -152,13 +153,26 @@ class PlayerActionView : View {
         mPaint.color = BG_COLOR
         canvas.drawCircle(0f, 0f, (width / 2).toFloat(), mPaint)
 
+        mPaint.pathEffect = mPathEffect
         //动画过程中，旋转圆，这样矩形的四个点位置比较好计算，而且两个矩形的变化可以对称
         if(valueAnimator?.isRunning == true || mFraction > 0) {
             if(!isPlay) {
                 canvas.rotate(90 * mFraction)
-            } else if(isPlay){
+            } else {
                 canvas.rotate(90 + 90 * mFraction)
             }
+        }
+
+        //结束时，只绘制一个圆角的三角形
+        if(mFraction == 1f && !isPlay) {
+            mPaint.color = RECT_COLOR
+            mLeftPath.reset()
+            mLeftPath.moveTo(mLeftEndOne.x, mLeftEndOne.y)
+            mLeftPath.lineTo(mRightEndThree.x, mRightEndThree.y)
+            mLeftPath.lineTo(mLeftEndFour.x, mLeftEndFour.y)
+            mLeftPath.close()
+            canvas.drawPath(mLeftPath, mPaint)
+            return
         }
 
         //画两个path，分别由四个点构成，动画不断改变四个点的位置
@@ -183,16 +197,18 @@ class PlayerActionView : View {
     private fun startAnimation() {
         valueAnimator?.end()
 
-        valueAnimator = ValueAnimator.ofFloat(0f, 1f)
-        valueAnimator?.duration = 500
-        valueAnimator?.addUpdateListener {
-            mFraction = it.animatedFraction
-            if(!isPlay) {
-                computePausePoint()
-            } else {
-                computePlayPoint()
+        if(valueAnimator == null) {
+            valueAnimator = ValueAnimator.ofFloat(0f, 1f)
+            valueAnimator?.duration = 500
+            valueAnimator?.addUpdateListener {
+                mFraction = it.animatedFraction
+                if(!isPlay) {
+                    computePausePoint()
+                } else {
+                    computePlayPoint()
+                }
+                invalidate()
             }
-            invalidate()
         }
         valueAnimator?.start()
     }
