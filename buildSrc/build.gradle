@@ -1,0 +1,14 @@
+repositories {
+    google()
+    jcenter()
+
+}
+
+dependencies {
+    implementation 'com.android.tools.build:gradle:4.1.0',{
+        exclude group:'org.ow2.asm'
+    }
+    implementation group: 'org.ow2.asm', name: 'asm-commons', version: '9.1'
+
+}
+
